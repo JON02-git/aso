@@ -1,2 +1,2 @@
-# aso
-Repositorio para la asignatura aso
+# Aso
+Repositorio para la asignatura aso donde se van a subir todas las actividades
