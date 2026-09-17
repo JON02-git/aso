@@ -1,0 +1,17 @@
+2026-09-10 08:01:03 INFO Servicio iniciado correctamente
+2026-09-10 08:02:15 INFO Usuario admin ha iniciado sesión
+2026-09-10 08:05:44 WARNING Uso de memoria elevado (78%)
+2026-09-10 08:07:12 ERROR No se pudo conectar con la base de datos
+2026-09-10 08:07:20 ERROR Timeout al conectar con la base de datos
+2026-09-10 08:10:01 INFO Reintentando conexión
+2026-09-10 08:10:05 INFO Conexión restablecida
+2026-09-10 08:15:33 WARNING Espacio en disco por debajo del 15%
+2026-09-10 08:20:10 INFO Copia de seguridad completada
+2026-09-10 08:25:47 ERROR Fallo al escribir en /var/log/app.log
+2026-09-10 08:30:02 INFO Usuario admin ha cerrado sesión
+2026-09-10 08:35:19 INFO Servicio de red reiniciado
+2026-09-10 08:40:56 WARNING Certificado SSL caduca en 10 días
+2026-09-10 08:45:11 INFO Usuario operador ha iniciado sesión
+2026-09-10 08:50:38 ERROR Permiso denegado al acceder a /etc/config
+2026-09-10 08:55:04 INFO Tarea programada ejecutada correctamente
+2026-09-10 09:00:00 INFO Servicio detenido para mantenimiento
