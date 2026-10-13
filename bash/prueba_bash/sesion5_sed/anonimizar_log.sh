@@ -1,3 +1,4 @@
+#!/bin/sh
 if [ "$#" -eq 0 ]; then
   echo "Uso: $0 fichero" 1>&2
   exit 1
