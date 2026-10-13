@@ -11,4 +11,4 @@ if [ ! -e "$FILE" ]; then
   exit 1
 fi
 
-sed '/^[[:space:]]*#/d;/^[[:space:]]*$/d' -- "$FILE"
+sed -i '/^#/d; /^$/d' "$FILE"
