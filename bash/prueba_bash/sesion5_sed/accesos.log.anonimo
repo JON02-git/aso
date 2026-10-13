@@ -1,0 +1,6 @@
+Oct 12 08:01:12 srv sshd[1201]: Failed password for root from XXX.XXX.XXX.XXX port
+51234 ssh2
+Oct 12 08:02:40 srv sshd[1210]: Accepted publickey for jgarcia from XXX.XXX.XXX.XXX
+port 50122 ssh2
+Oct 12 08:07:44 srv sshd[1322]: Failed password for invalid user admin from
+XXX.XXX.XXX.XXX port 40022 ssh2
