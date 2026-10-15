@@ -7,7 +7,7 @@ fi
 
 usuario=$1
 shell=$2
-fichero="passwd"
+fichero="lab-sed/passwd"
 if [ ! -f "$fichero" ]; then
     echo "Error: no existe el fichero $fichero"
     exit 1
