@@ -1,5 +1,5 @@
 #!/bin/bash
-destino="${1:-/var/backups}"
+destino="${1:-/home/joagilmas}"
 maximo="${2:-7}"
 
 registrar() {
@@ -25,7 +25,7 @@ fi
 fecha=$(date '+%Y%m%d-%H%M%S')
 archivo="$destino/etc-$fecha.tar.gz"
 
-tar -czf "$archivo" /etc
+tar -czf "$archivo" /etc > /dev/null 2>&1
 
 registrar "Copia creada: $archivo"
 
