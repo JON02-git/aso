@@ -3,32 +3,87 @@
 listar_usuarios() {
     echo "Ingrese el nombre de usuario:"
     read -r usuario
+    if (! id "$usuario" &>/dev/null); then
+        echo "El usuario $usuario no existe"
+        return 1
+    fi
     ps -u $usuario -o pid,stat,%cpu,%mem,cmd
 }
 buscar_proceso() {
     echo "Ingrese el nombre del proceso:"
     read -r proceso
+    if (ps -C "$proceso" == null); then
+        echo "No se encontró el proceso $proceso"
+        return 1
+    fi
     ps -C "$proceso" -o pid,user,%cpu,cmd
 }
 top_cpu() {
     echo "Ingrese el número de procesos a mostrar:"
     read -r n
-    n=$((n + 1))
-    ps aux --sort=-%cpu | head -n "$n"
+     n=${1:-5}
+    ps aux --sort=-%cpu | head -n "$((n+1))"
 }
 cambiar_prioridad() {
     echo "Ingrese el PID del proceso:"
     read -r pid
     echo "Ingrese la nueva prioridad (valor entre -20 y 19):"
     read -r prioridad
+
+    if ! validar_pid "$pid"; then
+        echo "Error: PID no válido o proceso inexistente"
+        return 1
+    fi
+
+    if [ "$prioridad" -lt -20 ] || [ "$prioridad" -gt 19 ]; then
+        echo "Error: el valor debe estar entre -20 y 19"
+        return 1
+    fi
+
+    if [[ $EUID -ne 0 ]] && [ "$prioridad" -lt 0 ]; then
+        echo "Error: necesitas ser root para usar valores negativos"
+        return 1
+    fi
+
     renice -n "$prioridad" -p "$pid"
-    echo "Prioridad del proceso $pid cambiada a $prioridad"
+    comando=$(ps -p "$pid" -o comm=)
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - cambio de prioridad - $pid - $comando" >> ~/gestion_procesos.log
 }
 finalizar_proceso() {
     echo "Ingrese el PID del proceso:"
     read -r pid
-    kill "$pid"
-    echo "Proceso $pid finalizado"
+    
+    if ! validar_pid "$pid"; then
+        echo "Error: PID no válido o proceso inexistente"
+        return 1
+    fi
+    
+    echo "¿Seguro que quieres finalizar el proceso $pid? (s/n)"
+    read -r confirmacion
+    if [[ "$confirmacion" != "s" ]]; then
+        echo "Finalización de proceso cancelada"
+        return 1
+    fi
+
+    comando=$(ps -p "$pid" -o comm=)
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - proceso finalizado - $pid - $comando" >> ~/gestion_procesos.log
+    kill -TERM "$pid"
+    sleep 3
+
+    if ps -p "$pid" > /dev/null; then
+        kill -KILL "$pid"
+        echo "Proceso $pid finalizado con SIGKILL"
+    else
+        echo "Proceso $pid finalizado con SIGTERM"
+    fi
+}
+
+validar_pid() {
+    if [[ "$1" =~ ^[0-9]+$ ]] && ps -p "$1" > /dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 while ! [[ "$option" == 6 ]]; do
