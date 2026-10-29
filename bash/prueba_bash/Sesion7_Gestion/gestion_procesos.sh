@@ -13,6 +13,7 @@ buscar_proceso() {
 top_cpu() {
     echo "Ingrese el número de procesos a mostrar:"
     read -r n
+    n=$((n + 1))
     ps aux --sort=-%cpu | head -n "$n"
 }
 cambiar_prioridad() {
@@ -20,11 +21,14 @@ cambiar_prioridad() {
     read -r pid
     echo "Ingrese la nueva prioridad (valor entre -20 y 19):"
     read -r prioridad
-    
+    renice -n "$prioridad" -p "$pid"
+    echo "Prioridad del proceso $pid cambiada a $prioridad"
 }
 finalizar_proceso() {
     echo "Ingrese el PID del proceso:"
     read -r pid
+    kill "$pid"
+    echo "Proceso $pid finalizado"
 }
 
 while ! [[ "$option" == 6 ]]; do
@@ -55,10 +59,13 @@ while ! [[ "$option" == 6 ]]; do
             ;;
         6)
             echo "Adiós !"
+            sleep 3
+            clear
             exit 0
             ;;
         *)
             echo "Opción no válida"
+            sleep 2
             clear
             ;;
     esac
