@@ -12,22 +12,22 @@ listar_usuarios() {
 buscar_proceso() {
     echo "Ingrese el nombre del proceso:"
     read -r proceso
-    if (ps -C "$proceso" == null); then
+    if (ps -C "$proceso" > /dev/null 2>&1); then
         echo "No se encontró el proceso $proceso"
         return 1
     fi
     ps -C "$proceso" -o pid,user,%cpu,cmd
 }
 top_cpu() {
-    echo "Ingrese el número de procesos a mostrar:"
+    echo "Ingrese el número de procesos a mostrar (por defecto 5): "
     read -r n
-     n=${1:-5}
+    n=${1:-5}
     ps aux --sort=-%cpu | head -n "$((n+1))"
 }
 cambiar_prioridad() {
     echo "Ingrese el PID del proceso:"
     read -r pid
-    echo "Ingrese la nueva prioridad (valor entre -20 y 19):"
+    echo "Ingrese la nueva prioridad (valor entre -20 y 19): "
     read -r prioridad
 
     if ! validar_pid "$pid"; then
@@ -66,7 +66,6 @@ finalizar_proceso() {
     fi
 
     comando=$(ps -p "$pid" -o comm=)
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - proceso finalizado - $pid - $comando" >> ~/gestion_procesos.log
     kill -TERM "$pid"
     sleep 3
 
@@ -76,6 +75,7 @@ finalizar_proceso() {
     else
         echo "Proceso $pid finalizado con SIGTERM"
     fi
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - proceso finalizado - $pid - $comando" >> ~/gestion_procesos.log
 }
 
 validar_pid() {
