@@ -1,0 +1,5 @@
+NUNCA EJECUTAR
+docker compose up -d
+
+EJECUTAR SIEMPRE
+docker compose start
