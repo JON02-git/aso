@@ -15,13 +15,19 @@ RUN echo "ubuntu:ubuntu" | chpasswd && \
     usermod -aG sudo ubuntu && \
     echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Corrige el propietario y permisos del home de ubuntu en todos los contenedores
+RUN chown ubuntu:ubuntu /home/ubuntu && \
+    chmod 755 /home/ubuntu
+
 # Configurar SSH
 RUN mkdir -p /var/run/sshd && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 22
 
-# Arrancar SSH y cron, y mantener el contenedor activo.
-# Así, si un playbook reinicia SSH, el contenedor no se detiene.
-CMD ["bash", "-c", "service ssh start && service cron start && exec sleep infinity"]
+# Arranca SSH y cron, corrige el propietario del volumen y mantiene el contenedor activo.
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
