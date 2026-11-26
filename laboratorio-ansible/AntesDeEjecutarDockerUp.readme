@@ -3,3 +3,22 @@ docker compose up -d
 
 EJECUTAR SIEMPRE
 docker compose start
+
+comandos a ejecutar cuando se startea con los permisos de ubuntu y sudo
+for container in web1 web2 db1 db2; do
+  docker compose exec -u root $container chown -R ubuntu:ubuntu /home/ubuntu
+  docker compose exec -u root $container chmod 700 /home/ubuntu
+  docker compose exec -u root $container mkdir -p /home/ubuntu/.ssh
+  docker compose exec -u root $container chmod 700 /home/ubuntu/.ssh
+  docker compose exec -u root $container chown ubuntu:ubuntu /home/ubuntu/.ssh
+done
+
+ssh-copy-id ubuntu@web1
+ssh-copy-id ubuntu@web2
+ssh-copy-id ubuntu@db1
+ssh-copy-id ubuntu@db2
+
+for container in web1 web2 db1 db2; do
+  docker compose exec -u root $container chown root:root /usr/bin/sudo
+  docker compose exec -u root $container chmod 4755 /usr/bin/sudo
+done
